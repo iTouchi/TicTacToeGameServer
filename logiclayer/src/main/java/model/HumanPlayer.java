@@ -2,25 +2,36 @@ package model;
 
 public class HumanPlayer extends Player {
 
-    private String name;
     private int id;
+    private String name;
     private int wins;
     private int losses;
     private int draw;
+    private String symbol;
 
     @Override
     public void takeTurn() {
-        super.takeTurn();
+        //do something
+    }
+    @Override
+    public String getSymbol() {
+        return symbol;
     }
 
-    public HumanPlayer(String name, int id, int wins, int losses, int draw) {
-        this.name = name;
+
+
+
+
+    public HumanPlayer(int id, String name, int wins, int losses, int draw, String symbol) {
         this.id = id;
+        this.name = name;
         this.wins = wins;
         this.losses = losses;
         this.draw = draw;
+        this.symbol = symbol;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -61,4 +72,6 @@ public class HumanPlayer extends Player {
     public void setDraw(int draw) {
         this.draw = draw;
     }
+
+
 }

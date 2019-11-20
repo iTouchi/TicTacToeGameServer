@@ -39,4 +39,11 @@ public class Board {
         tile.setOccupiedBy(player);
     }
 
+    public ArrayList<Tile> getTiles() {
+        return tiles;
+    }
+
+    public void setTiles(ArrayList<Tile> tiles) {
+        this.tiles = tiles;
+    }
 }

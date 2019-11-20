@@ -1,6 +1,6 @@
 package model;
 
-public class AiPlayer extends Player {
+public class AiPlayer  {
 
 
     private String name;
@@ -13,8 +13,5 @@ public class AiPlayer extends Player {
         this.name = name;
     }
 
-    @Override
-    public void takeTurn() {
-        //do something
-    }
+
 }
