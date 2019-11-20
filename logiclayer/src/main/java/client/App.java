@@ -10,8 +10,8 @@ import java.util.Scanner;
 public class App {
 
     static Scanner in;
-    static String[] board;
     static Player turn;
+    static boolean allTilesOccupied;
 
     static Game game;
     static Player playerOne;
@@ -26,9 +26,9 @@ public class App {
         board2 = new Board();
         game = new Game(playerOne, playerTwo, board2);
         tiles = board2.getTiles();
+        allTilesOccupied = false;
 
         in = new Scanner(System.in);
-        board = new String[9];
         turn = playerOne;
         String winner = null;
         //populateEmptyBoard();
@@ -75,18 +75,17 @@ public class App {
 
     static String checkWinner() {
 
-        Boolean gaverder = true;
-
         for (int i = 0; i < 9; ) {
+            allTilesOccupied = true;
             if (!tiles.get(i).checkOccupied()) {
-                gaverder = false;
+                allTilesOccupied = false;
                 break;
             } else{
                 i++;
             }
         }
 
-        if (gaverder) {
+
             for (int a = 0; a < 8; a++) {
                 String line = null;
                 switch (a) {
@@ -119,16 +118,12 @@ public class App {
                     return playerOne.getName();
                 } else if (line.equals(playerTwo.getSymbol() + playerTwo.getSymbol() + playerTwo.getSymbol())) {
                     return playerTwo.getName();
-                } else {
-                    return "draw";
                 }
+
+                if (allTilesOccupied) {
+                    return "draw";
             }
         }
-//        for (int a = 0; a < 9; a++) {
-//            if (Arrays.asList(board).contains(String.valueOf(a + 1))) {
-//                break;
-//            } else if (a == 8) return "draw";
-//        }
 
         System.out.println(turn.getName() + "'s turn; enter a slot number to place " + turn.getSymbol() + " in:");
         return null;
