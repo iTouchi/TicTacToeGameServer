@@ -36,7 +36,7 @@ public class App {
         System.out.println("Welcome to 2 Player Tic Tac Toe.");
         System.out.println("--------------------------------");
         printBoard();
-        System.out.println(playerOne.getName()+ "'s will play first. Enter a slot number to place X in:");
+        System.out.println(playerOne.getName() + "'s will play first. Enter a slot number to place X in:");
 
         while (winner == null) {
             int numInput;
@@ -51,16 +51,16 @@ public class App {
                 continue;
             }
 
-            if ((tiles.get(numInput).getId() == numInput)&&!(tiles.get(numInput).checkOccupied())) {
-                    if (turn.equals(playerOne)) {
-                        tiles.get(numInput).setOccupiedBy(playerOne);
-                        turn = playerTwo;
-                    } else {
-                        tiles.get(numInput).setOccupiedBy(playerTwo);
-                        turn = playerOne;
-                    }
-                    printBoard();
-                    winner = checkWinner();
+            if ((tiles.get(numInput).getId() == numInput) && !(tiles.get(numInput).checkOccupied())) {
+                if (turn.equals(playerOne)) {
+                    tiles.get(numInput).setOccupiedBy(playerOne);
+                    turn = playerTwo;
+                } else {
+                    tiles.get(numInput).setOccupiedBy(playerTwo);
+                    turn = playerOne;
+                }
+                printBoard();
+                winner = checkWinner();
             } else {
                 System.out.println("Slot already taken; re-enter slot number:");
                 continue;
@@ -74,42 +74,61 @@ public class App {
     }
 
     static String checkWinner() {
-        for (int a = 0; a < 8; a++) {
-            String line = null;
-            switch (a) {
-                case 0:
-                    line = tiles.get(0).toString() + tiles.get(1) + tiles.get(2);
-                    break;
-                case 1:
-                    line = tiles.get(3).toString() + tiles.get(4) + tiles.get(5);
-                    break;
-                case 2:
-                    line = tiles.get(6).toString() + tiles.get(7) + tiles.get(8);
-                    break;
-                case 3:
-                    line = tiles.get(0).toString() + tiles.get(3) + tiles.get(6);
-                    break;
-                case 4:
-                    line = tiles.get(1).toString() + tiles.get(4) + tiles.get(7);
-                    break;
-                case 5:
-                    line = tiles.get(2).toString() + tiles.get(5) + tiles.get(8);
-                    break;
-                case 6:
-                    line = tiles.get(0).toString() + tiles.get(4) + tiles.get(8);
-                    break;
-                case 7:
-                    line = tiles.get(2).toString() + tiles.get(4) + tiles.get(6);
-                    break;
-            }
-            if (line.equals(playerOne.getSymbol()+playerOne.getSymbol()+playerOne.getSymbol())) {
-                return playerOne.getName();
-            } else if (line.equals(playerTwo.getSymbol()+playerTwo.getSymbol()+playerTwo.getSymbol())) {
-                return playerTwo.getName();
+
+        Boolean gaverder = true;
+
+        for (int i = 0; i < 9; ) {
+            if (!tiles.get(i).checkOccupied()) {
+                gaverder = false;
+                break;
+            } else{
+                i++;
             }
         }
 
-
+        if (gaverder) {
+            for (int a = 0; a < 8; a++) {
+                String line = null;
+                switch (a) {
+                    case 0:
+                        line = tiles.get(0).toString() + tiles.get(1) + tiles.get(2);
+                        break;
+                    case 1:
+                        line = tiles.get(3).toString() + tiles.get(4) + tiles.get(5);
+                        break;
+                    case 2:
+                        line = tiles.get(6).toString() + tiles.get(7) + tiles.get(8);
+                        break;
+                    case 3:
+                        line = tiles.get(0).toString() + tiles.get(3) + tiles.get(6);
+                        break;
+                    case 4:
+                        line = tiles.get(1).toString() + tiles.get(4) + tiles.get(7);
+                        break;
+                    case 5:
+                        line = tiles.get(2).toString() + tiles.get(5) + tiles.get(8);
+                        break;
+                    case 6:
+                        line = tiles.get(0).toString() + tiles.get(4) + tiles.get(8);
+                        break;
+                    case 7:
+                        line = tiles.get(2).toString() + tiles.get(4) + tiles.get(6);
+                        break;
+                }
+                if (line.equals(playerOne.getSymbol() + playerOne.getSymbol() + playerOne.getSymbol())) {
+                    return playerOne.getName();
+                } else if (line.equals(playerTwo.getSymbol() + playerTwo.getSymbol() + playerTwo.getSymbol())) {
+                    return playerTwo.getName();
+                } else {
+                    return "draw";
+                }
+            }
+        }
+//        for (int a = 0; a < 9; a++) {
+//            if (Arrays.asList(board).contains(String.valueOf(a + 1))) {
+//                break;
+//            } else if (a == 8) return "draw";
+//        }
 
         System.out.println(turn.getName() + "'s turn; enter a slot number to place " + turn.getSymbol() + " in:");
         return null;
