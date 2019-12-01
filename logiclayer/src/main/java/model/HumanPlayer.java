@@ -18,10 +18,6 @@ public class HumanPlayer extends Player {
         return symbol;
     }
 
-
-
-
-
     public HumanPlayer(int id, String name, int wins, int losses, int draw, String symbol) {
         this.id = id;
         this.name = name;

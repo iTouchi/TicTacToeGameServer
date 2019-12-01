@@ -11,10 +11,6 @@
 
     <artifactId>websocketserver</artifactId>
 
-    <name>websocketserver</name>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
-
     <dependencies>
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
@@ -32,6 +28,28 @@
             <artifactId>junit</artifactId>
             <version>4.11</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.1</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.29</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>TicTacToeGameServer</groupId>
+            <artifactId>logiclayer</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
