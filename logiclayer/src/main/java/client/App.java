@@ -2,10 +2,7 @@ package client;
 
 import model.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 import static java.lang.Integer.*;
 
@@ -20,6 +17,9 @@ public class App {
     static Player playerTwo;
     static Board board2;
     static ArrayList<Tile> tiles;
+
+    static int MAX = 1000;
+    static int MIN = -1000;
 
     public static void main(String[] args) {
 
@@ -74,8 +74,9 @@ public class App {
 //            System.out.println("Congratulations! " + winner + " has won! Thanks for playing.");
 //        }
 
-        evaluateTest();
-        algoritmeTest();
+        //evaluateTest();
+        //algoritmeTest();
+        testNEW();
 
     }
 
@@ -200,8 +201,8 @@ public class App {
 
     static int algoritmeTest() {
         String[][] b = {
-                {"X", "O", "X"},
-                {"O", "O", "X"},
+                {"O", "X", "X"},
+                {"O", "_", "_"},
                 {"_", "_", "_"}
         };
 
@@ -237,7 +238,7 @@ public class App {
         }
 
         // If there are no moves left and there is no winner the game will return a tie
-        if (isMoveLeft(board)==false) {
+        if (!isMoveLeft(board)) { //CHANGED was (isMoveLeft(board)==false)
             return 0;
         }
 
@@ -254,7 +255,7 @@ public class App {
                         board[i][j] = playerOne.getSymbol();
 
                         // Call minimax recursively and choose the max value
-                        best = max( best, minimax(board, depth + 1, !isMax));
+                        best = max(best, minimax(board, depth + 1, !isMax));
 
                         // Undo the move
                         board[i][j] = "_";
@@ -275,8 +276,8 @@ public class App {
                         // Make the move
                         board[i][j] = playerTwo.getSymbol();
 
-                        // Call minimax recursively and choose the min value  // was eerst !isMAx
-                        best = min(best, minimax(board, depth + 1, !isMax));
+                        // Call minimax recursively and choose the min value
+                        best = min(best, minimax(board, depth + 1, !isMax)); //CHANGED was !isMax
 
                         // Undo the move
                         board[i][j] = "_";
@@ -323,4 +324,45 @@ public class App {
         return bestMove;
     }
 
+    static int minimaxNEW(int depth, int nodeIndex, Boolean maximizingPlayer, int values[], int alpha, int beta) {
+
+        if (depth == 3) {
+            return values[nodeIndex];
+        }
+
+        if (maximizingPlayer) {
+            int best = MIN;
+
+            for (int i = 0; i < 2; i++) {
+                int val = minimaxNEW(depth + 1, nodeIndex * 2 + i, false, values, alpha, beta);
+
+                best = max(best, val);
+                alpha = max(alpha, best);
+
+                if (beta <= alpha) {
+                    break;
+                }
+            }
+            return best;
+        } else {
+            int best = MAX;
+            for (int i = 0; i < 2; i++) {
+                int val = minimaxNEW(depth + 1, nodeIndex * 2 + i, true, values, alpha, beta);
+
+                best = min(best, val);
+                beta = min(beta, best);
+
+                if (beta <= alpha) {
+                    break;
+                }
+            }
+            return best;
+        }
+    }
+
+    static void testNEW() {
+        int values[] = {3, 5, 6, 9, 1, 2, 0, -1};
+        System.out.println("The optimal value is : " +
+                minimaxNEW(0, 0, true, values, MIN, MAX));
+    }
 }
