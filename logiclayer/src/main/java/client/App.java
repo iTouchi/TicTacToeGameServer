@@ -75,8 +75,8 @@ public class App {
 //        }
 
         //evaluateTest();
-        //algoritmeTest();
-        testNEW();
+        algoritmeTest();
+        //testNEW();
 
     }
 
@@ -149,15 +149,15 @@ public class App {
 
     // Returns a values based on who is winning
     // board[3][3] is the Tic-Tac-Toe board
-    static int evaluate(String[][] board) {
+    static int evaluate(String[][] board, int depth) {
 
         // Checking for horizontal victory
         for (int row = 0; row < 3; row++) {
             if (board[row][0] == board[row][1] && board[row][1] == board[row][2]) {
                 if (board[row][0] == "X")
-                    return +10;
+                    return +10 - depth;
                 if (board[row][0] == "O")
-                    return -10;
+                    return -10 +depth;
             }
         }
 
@@ -195,7 +195,7 @@ public class App {
                 {"_", "_", "X"}
         };
 
-        int value = evaluate(b);
+        int value = evaluate(b,0);
         System.out.println("The value of this board is " + value);
     }
 
@@ -226,7 +226,7 @@ public class App {
     }
 
     static int minimax(String[][] board, int depth, boolean isMax) {
-        int score = evaluate(board);
+        int score = evaluate(board, depth);
 
         // If Maximizer has won the game will return the evaluated score for the Maximizer
         if (score == 10) {
