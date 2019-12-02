@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import static java.lang.Integer.*;
+
 public class App {
 
     static Scanner in;
@@ -21,12 +23,12 @@ public class App {
 
     public static void main(String[] args) {
 
-//        playerOne = new HumanPlayer(0, "Jan", 0, 0, 0, "X");
-//        playerTwo = new HumanPlayer(1, "Piet", 0, 0, 0, "O");
-//        board2 = new Board();
-//        game = new Game(playerOne, playerTwo, board2);
-//        tiles = board2.getTiles();
-//        allTilesOccupied = false;
+        playerOne = new HumanPlayer(0, "Jan", 0, 0, 0, "X");
+        playerTwo = new HumanPlayer(1, "Piet", 0, 0, 0, "O");
+        board2 = new Board();
+        game = new Game(playerOne, playerTwo, board2);
+        tiles = board2.getTiles();
+        allTilesOccupied = false;
 //
 //        in = new Scanner(System.in);
 //        turn = playerOne;
@@ -73,6 +75,7 @@ public class App {
 //        }
 
         evaluateTest();
+        algoritmeTest();
 
     }
 
@@ -184,19 +187,140 @@ public class App {
         return 0;
     }
 
-    static void evaluateTest(){
+    static void evaluateTest() {
         String[][] b = {
-                { "X", "_", "O"},
-                { "_", "X", "O"},
-                { "_", "_", "X"}
+                {"X", "_", "O"},
+                {"_", "X", "O"},
+                {"_", "_", "X"}
         };
 
         int value = evaluate(b);
-        System.out.println("The value of this board is" + value);
+        System.out.println("The value of this board is " + value);
+    }
 
+    static int algoritmeTest() {
+        String[][] b = {
+                {"X", "O", "X"},
+                {"O", "O", "X"},
+                {"_", "_", "_"}
+        };
 
+        Move bestMove = findBestMove(b);
 
+        System.out.println("The Optimal Move is : ");
+        System.out.println("Row: " + bestMove.row + " Col: " + bestMove.col);
+        return 0;
+    }
 
+    //Check if there are moves remaining
+    static boolean isMoveLeft(String[][] board) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[i][j] == "_") {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    static int minimax(String[][] board, int depth, boolean isMax) {
+        int score = evaluate(board);
+
+        // If Maximizer has won the game will return the evaluated score for the Maximizer
+        if (score == 10) {
+            return score;
+        }
+        // If Minimizer has won the game will return the evaluated score for the Minimizer
+        if (score == -10) {
+            return score;
+        }
+
+        // If there are no moves left and there is no winner the game will return a tie
+        if (isMoveLeft(board)==false) {
+            return 0;
+        }
+
+        // If it's the Maximizer's turn
+        if (isMax) {
+            int best = -1000;
+
+            // Traverse all cells
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    // Check if cell is empty
+                    if (board[i][j] == "_") {
+                        // Make the move
+                        board[i][j] = playerOne.getSymbol();
+
+                        // Call minimax recursively and choose the max value
+                        best = max( best, minimax(board, depth + 1, !isMax));
+
+                        // Undo the move
+                        board[i][j] = "_";
+                    }
+                }
+            }
+            return best;
+        }
+        // If it's the Minimizer's turn
+        else {
+            int best = 1000;
+
+            // Traverse all cells
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    // Check if cell is empty
+                    if (board[i][j] == "_") {
+                        // Make the move
+                        board[i][j] = playerTwo.getSymbol();
+
+                        // Call minimax recursively and choose the min value  // was eerst !isMAx
+                        best = min(best, minimax(board, depth + 1, !isMax));
+
+                        // Undo the move
+                        board[i][j] = "_";
+                    }
+                }
+            }
+            return best;
+        }
+    }
+
+    static Move findBestMove(String[][] board) {
+        int bestVal = -1000;
+        Move bestMove = new Move();
+        bestMove.row = -1;
+        bestMove.col = -1;
+
+        // Traverse all cells, evaluate minimax function for all empty cells.
+        // Return the cell with with the optimal value.
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                // Check if cell is empty
+                if (board[i][j] == "_") {
+                    // Makle the move
+                    board[i][j] = playerOne.getSymbol();
+
+                    // Compute evaluation function for this move.
+                    int moveVal = minimax(board, 0, false);
+
+                    // Undo the move
+                    board[i][j] = "_";
+
+                    // If the value of the current move is more than the best value
+                    // update best value.
+                    if (moveVal > bestVal) {
+                        bestMove.row = i;
+                        bestMove.col = j;
+                        bestVal = moveVal;
+                    }
+                }
+            }
+        }
+        System.out.println("The value of the best move is : " + bestVal);
+        return bestMove;
     }
 
 }
