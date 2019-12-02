@@ -7,72 +7,83 @@ import java.util.*;
 import static java.lang.Integer.*;
 
 public class App {
+    //Other stuff
+    static Scanner userInput;
 
-    static Scanner in;
+    // Game elements
+    static Player playerOne;
+    static Player playerTwo;
+    static Board board;
+    static Session gameSession;
+    static Tile[] arrayTiles;
+    static String[][] stringTiles;
+
+    // Gameplay stuff
     static Player turn;
     static boolean allTilesOccupied;
 
-    static Game game;
-    static Player playerOne;
-    static Player playerTwo;
-    static Board board2;
-    static ArrayList<Tile> tiles;
-
+    // Algorithm
     static int MAX = 1000;
     static int MIN = -1000;
 
+    static void getReady(){
+        playerOne = new HumanPlayer(0, "AI", 0, 0, 0, "X");
+        playerTwo = new HumanPlayer(1, "Jan", 0, 0, 0, "O");
+
+        board = new Board();
+        gameSession = new Session(playerOne, playerTwo, board, 1);
+        arrayTiles = board.getArrayTiles();
+        stringTiles = board.getStringTiles();
+    }
+
     public static void main(String[] args) {
 
-        playerOne = new HumanPlayer(0, "Jan", 0, 0, 0, "X");
-        playerTwo = new HumanPlayer(1, "Piet", 0, 0, 0, "O");
-        board2 = new Board();
-        game = new Game(playerOne, playerTwo, board2);
-        tiles = board2.getTiles();
+        getReady();
+
         allTilesOccupied = false;
-//
-//        in = new Scanner(System.in);
-//        turn = playerOne;
-//        String winner = null;
-//        //populateEmptyBoard();
-//
-//        System.out.println("Welcome to 2 Player Tic Tac Toe.");
-//        System.out.println("--------------------------------");
-//        printBoard();
-//        System.out.println(playerOne.getName() + "'s will play first. Enter a slot number to place X in:");
-//
-//        while (winner == null) {
-//            int numInput;
-//            try {
-//                numInput = in.nextInt();
-//                if (!(numInput >= 0 && numInput <= 8)) {
-//                    System.out.println("Invalid input; re-enter slot number:");
-//                    continue;
-//                }
-//            } catch (InputMismatchException e) {
-//                System.out.println("Invalid input; re-enter slot number:");
-//                continue;
-//            }
-//
-//            if ((tiles.get(numInput).getId() == numInput) && !(tiles.get(numInput).checkOccupied())) {
-//                if (turn.equals(playerOne)) {
-//                    tiles.get(numInput).setOccupiedBy(playerOne);
-//                    turn = playerTwo;
-//                } else {
-//                    tiles.get(numInput).setOccupiedBy(playerTwo);
-//                    turn = playerOne;
-//                }
-//                printBoard();
-//                winner = checkWinner();
-//            } else {
-//                System.out.println("Slot already taken; re-enter slot number:");
-//                continue;
-//            }
-//        }
-//        if (winner.equalsIgnoreCase("draw")) {
-//            System.out.println("It's a draw! Thanks for playing.");
-//        } else {
-//            System.out.println("Congratulations! " + winner + " has won! Thanks for playing.");
-//        }
+        userInput = new Scanner(System.in);
+        turn = playerOne; // make this random
+
+        String winner = null;
+
+        System.out.println("Welcome to 2 Player Tic Tac Toe.");
+        System.out.println("--------------------------------");
+        printBoard();
+        System.out.println(playerOne.getName() + "'s will play first. Enter a slot number to place X userInput:");
+
+        while (winner == null) {
+            int numInput;
+            try {
+                numInput = userInput.nextInt();
+                if (!(numInput >= 0 && numInput <= 8)) {
+                    System.out.println("Invalid input; re-enter slot number:");
+                    continue;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input; re-enter slot number:");
+                continue;
+            }
+
+            if ((arrayTiles[numInput].getId() == numInput) && !(arrayTiles[numInput].checkOccupied())) {
+                if (turn.equals(playerOne)) {
+                    arrayTiles[numInput].setOccupiedBy(playerOne);
+                    turn = playerTwo;
+                } else {
+                    arrayTiles[numInput].setOccupiedBy(playerTwo);
+                    turn = playerOne;
+                }
+                printBoard();
+                winner = checkWinner();
+            } else {
+                System.out.println("Slot already taken; re-enter slot number:");
+                continue;
+            }
+        }
+        if (winner.equalsIgnoreCase("draw")) {
+            System.out.println("It's a draw! Thanks for playing.");
+        } else {
+            System.out.println("Congratulations! " + winner + " has won! Thanks for playing.");
+        }
 
         //evaluateTest();
         algoritmeTest();
@@ -88,28 +99,28 @@ public class App {
             String line = null;
             switch (a) {
                 case 0:
-                    line = tiles.get(0).toString() + tiles.get(1) + tiles.get(2);
+                    line = arrayTiles[0].toString() + arrayTiles[1] + arrayTiles[2];
                     break;
                 case 1:
-                    line = tiles.get(3).toString() + tiles.get(4) + tiles.get(5);
+                    line = arrayTiles[3].toString() + arrayTiles[4] + arrayTiles[5];
                     break;
                 case 2:
-                    line = tiles.get(6).toString() + tiles.get(7) + tiles.get(8);
+                    line = arrayTiles[6].toString() + arrayTiles[7] + arrayTiles[8];
                     break;
                 case 3:
-                    line = tiles.get(0).toString() + tiles.get(3) + tiles.get(6);
+                    line = arrayTiles[0].toString() + arrayTiles[3] + arrayTiles[6];
                     break;
                 case 4:
-                    line = tiles.get(1).toString() + tiles.get(4) + tiles.get(7);
+                    line = arrayTiles[1].toString() + arrayTiles[4] + arrayTiles[7];
                     break;
                 case 5:
-                    line = tiles.get(2).toString() + tiles.get(5) + tiles.get(8);
+                    line = arrayTiles[2].toString() + arrayTiles[5] + arrayTiles[8];
                     break;
                 case 6:
-                    line = tiles.get(0).toString() + tiles.get(4) + tiles.get(8);
+                    line = arrayTiles[0].toString() + arrayTiles[4] + arrayTiles[8];
                     break;
                 case 7:
-                    line = tiles.get(2).toString() + tiles.get(4) + tiles.get(6);
+                    line = arrayTiles[2].toString() + arrayTiles[4] + arrayTiles[6];
                     break;
             }
             if (line.equals(playerOne.getSymbol() + playerOne.getSymbol() + playerOne.getSymbol())) {
@@ -121,24 +132,31 @@ public class App {
             }
         }
 
-        System.out.println(turn.getName() + "'s turn; enter a slot number to place " + turn.getSymbol() + " in:");
+        System.out.println(turn.getName() + "'s turn; enter a slot number to place " + turn.getSymbol() + " userInput:");
         return null;
     }
 
     static void printBoard() {
         System.out.println("/---|---|---\\");
-        System.out.println("| " + tiles.get(0) + " | " + tiles.get(1) + " | " + tiles.get(2) + " |");
+        System.out.println("| " + arrayTiles[0] + " | " + arrayTiles[1] + " | " + arrayTiles[2] + " |");
         System.out.println("|-----------|");
-        System.out.println("| " + tiles.get(3) + " | " + tiles.get(4) + " | " + tiles.get(5) + " |");
+        System.out.println("| " + arrayTiles[3] + " | " + arrayTiles[4] + " | " + arrayTiles[5] + " |");
         System.out.println("|-----------|");
-        System.out.println("| " + tiles.get(6) + " | " + tiles.get(7) + " | " + tiles.get(8) + " |");
+        System.out.println("| " + arrayTiles[6] + " | " + arrayTiles[7] + " | " + arrayTiles[8] + " |");
         System.out.println("/---|---|---\\");
+
+        stringTiles = new String[][] {
+                {arrayTiles[0].getSymbol(), arrayTiles[1].getSymbol(), arrayTiles[2].getSymbol()},
+                {arrayTiles[3].getSymbol(), arrayTiles[4].getSymbol(), arrayTiles[5].getSymbol()},
+                {arrayTiles[6].getSymbol(), arrayTiles[7].getSymbol(), arrayTiles[8].getSymbol()}
+        };
+
     }
 
     static void checkTiles() {
         for (int i = 0; i < 9; ) {
             allTilesOccupied = true;
-            if (!tiles.get(i).checkOccupied()) {
+            if (!arrayTiles[i].checkOccupied()) {
                 allTilesOccupied = false;
                 break;
             } else {
@@ -202,8 +220,8 @@ public class App {
     static int algoritmeTest() {
         String[][] b = {
                 {"O", "X", "X"},
-                {"O", "_", "_"},
-                {"_", "_", "_"}
+                {"O", "O", "_"},
+                {"X", "_", "_"}
         };
 
         Move bestMove = findBestMove(b);
@@ -228,16 +246,16 @@ public class App {
     static int minimax(String[][] board, int depth, boolean isMax) {
         int score = evaluate(board, depth);
 
-        // If Maximizer has won the game will return the evaluated score for the Maximizer
+        // If Maximizer has won the gameSession will return the evaluated score for the Maximizer
         if (score == 10) {
             return score;
         }
-        // If Minimizer has won the game will return the evaluated score for the Minimizer
+        // If Minimizer has won the gameSession will return the evaluated score for the Minimizer
         if (score == -10) {
             return score;
         }
 
-        // If there are no moves left and there is no winner the game will return a tie
+        // If there are no moves left and there is no winner the gameSession will return a tie
         if (!isMoveLeft(board)) { //CHANGED was (isMoveLeft(board)==false)
             return 0;
         }
@@ -255,7 +273,7 @@ public class App {
                         board[i][j] = playerOne.getSymbol();
 
                         // Call minimax recursively and choose the max value
-                        best = max(best, minimax(board, depth + 1, !isMax));
+                        best = max(best, minimax(board, depth + 1, isMax));//CHANGED was !isMax
 
                         // Undo the move
                         board[i][j] = "_";
@@ -277,7 +295,7 @@ public class App {
                         board[i][j] = playerTwo.getSymbol();
 
                         // Call minimax recursively and choose the min value
-                        best = min(best, minimax(board, depth + 1, !isMax)); //CHANGED was !isMax
+                        best = min(best, minimax(board, depth + 1, !isMax));
 
                         // Undo the move
                         board[i][j] = "_";
@@ -324,45 +342,45 @@ public class App {
         return bestMove;
     }
 
-    static int minimaxNEW(int depth, int nodeIndex, Boolean maximizingPlayer, int values[], int alpha, int beta) {
-
-        if (depth == 3) {
-            return values[nodeIndex];
-        }
-
-        if (maximizingPlayer) {
-            int best = MIN;
-
-            for (int i = 0; i < 2; i++) {
-                int val = minimaxNEW(depth + 1, nodeIndex * 2 + i, false, values, alpha, beta);
-
-                best = max(best, val);
-                alpha = max(alpha, best);
-
-                if (beta <= alpha) {
-                    break;
-                }
-            }
-            return best;
-        } else {
-            int best = MAX;
-            for (int i = 0; i < 2; i++) {
-                int val = minimaxNEW(depth + 1, nodeIndex * 2 + i, true, values, alpha, beta);
-
-                best = min(best, val);
-                beta = min(beta, best);
-
-                if (beta <= alpha) {
-                    break;
-                }
-            }
-            return best;
-        }
-    }
-
-    static void testNEW() {
-        int values[] = {3, 5, 6, 9, 1, 2, 0, -1};
-        System.out.println("The optimal value is : " +
-                minimaxNEW(0, 0, true, values, MIN, MAX));
-    }
+//    static int minimaxNEW(int depth, int nodeIndex, Boolean maximizingPlayer, int values[], int alpha, int beta) {
+//
+//        if (depth == 3) {
+//            return values[nodeIndex];
+//        }
+//
+//        if (maximizingPlayer) {
+//            int best = MIN;
+//
+//            for (int i = 0; i < 2; i++) {
+//                int val = minimaxNEW(depth + 1, nodeIndex * 2 + i, false, values, alpha, beta);
+//
+//                best = max(best, val);
+//                alpha = max(alpha, best);
+//
+//                if (beta <= alpha) {
+//                    break;
+//                }
+//            }
+//            return best;
+//        } else {
+//            int best = MAX;
+//            for (int i = 0; i < 2; i++) {
+//                int val = minimaxNEW(depth + 1, nodeIndex * 2 + i, true, values, alpha, beta);
+//
+//                best = min(best, val);
+//                beta = min(beta, best);
+//
+//                if (beta <= alpha) {
+//                    break;
+//                }
+//            }
+//            return best;
+//        }
+//    }
+//
+//    static void testNEW() {
+//        int values[] = {3, 5, 6, 9, 1, 2, 0, -1};
+//        System.out.println("The optimal value is : " +
+//                minimaxNEW(0, 0, true, values, MIN, MAX));
+//    }
 }

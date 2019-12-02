@@ -1,15 +1,17 @@
 package model;
 
-public class Game {
+public class Session {
 
     private Player playerOne;
     private Player playerTwo;
     private Board board;
+    private int id;
 
-    public Game(Player playerOne, Player playerTwo, Board board) {
+    public Session(Player playerOne, Player playerTwo, Board board, int sessionId) {
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
         this.board = board;
+        this.id = sessionId;
     }
 
     public void StartGame(){

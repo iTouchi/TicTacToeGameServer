@@ -6,11 +6,13 @@ public class Tile {
     private int row;
     private int col;
     private Player occupiedBy = null;
+    private String symbol;
 
     public Tile(int id, int row, int col) {
         this.id = id;
         this.row = row;
         this.col = col;
+        this.symbol = "_";
     }
 
     public void setId(int id) {
@@ -23,6 +25,7 @@ public class Tile {
 
     public void setOccupiedBy(Player player) {
         this.occupiedBy = player;
+        this.symbol = player.getSymbol();
     }
 
     public boolean checkOccupied() {
@@ -33,6 +36,9 @@ public class Tile {
         }
     }
 
+    public String getSymbol(){
+        return this.symbol;
+    }
     @Override
     public String toString() {
 
