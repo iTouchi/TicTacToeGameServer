@@ -23,8 +23,8 @@ public class App {
     static boolean allTilesOccupied;
 
     // Algorithm
-    static int MAX = 1000;
-    static int MIN = -1000;
+    static Algorithm algorithm;
+
 
     static void getReady(){
         playerOne = new HumanPlayer(0, "AI", 0, 0, 0, "X");
@@ -34,6 +34,8 @@ public class App {
         gameSession = new Session(playerOne, playerTwo, board, 1);
         arrayTiles = board.getArrayTiles();
         stringTiles = board.getStringTiles();
+
+        algorithm = new Algorithm();
     }
 
     public static void main(String[] args) {
@@ -165,222 +167,25 @@ public class App {
         }
     }
 
-    // Returns a values based on who is winning
-    // board[3][3] is the Tic-Tac-Toe board
-    static int evaluate(String[][] board, int depth) {
+    static void algoritmeTest() {
+        long start = System.currentTimeMillis();
 
-        // Checking for horizontal victory
-        for (int row = 0; row < 3; row++) {
-            if (board[row][0] == board[row][1] && board[row][1] == board[row][2]) {
-                if (board[row][0] == "X")
-                    return +10 - depth;
-                if (board[row][0] == "O")
-                    return -10 +depth;
-            }
-        }
-
-        // Checking for vertical victory
-        for (int col = 0; col < 3; col++) {
-            if (board[0][col] == board[1][col] && board[1][col] == board[2][col]) {
-                if (board[0][col] == "X")
-                    return +10;
-                if (board[0][col] == "O")
-                    return -10;
-            }
-        }
-
-        // Checking for diagonal victory
-        if (board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
-            if (board[0][0] == "X")
-                return +10;
-            if (board[0][0] == "O")
-                return -10;
-        }
-        if (board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
-            if (board[0][2] == "X")
-                return +10;
-            if (board[0][2] == "O")
-                return -10;
-        }
-        // Else if none has won return 0 for Draw
-        return 0;
-    }
-
-    static void evaluateTest() {
         String[][] b = {
-                {"X", "_", "O"},
-                {"_", "X", "O"},
-                {"_", "_", "X"}
+                {"X", "O", "X"},
+                {"O", "X", "O"},
+                {"_", "_", "_"}
         };
 
-        int value = evaluate(b,0);
-        System.out.println("The value of this board is " + value);
-    }
-
-    static int algoritmeTest() {
-        String[][] b = {
-                {"O", "X", "X"},
-                {"O", "O", "_"},
-                {"X", "_", "_"}
-        };
-
-        Move bestMove = findBestMove(b);
+        Move bestMove = algorithm.findBestMove(b, playerOne, playerTwo);
 
         System.out.println("The Optimal Move is : ");
         System.out.println("Row: " + bestMove.row + " Col: " + bestMove.col);
-        return 0;
+
+        long finish = System.currentTimeMillis();
+
+        long timeElapsed = finish - start;
+
+        System.out.println("Calculation time in MS = " + timeElapsed);
     }
 
-    //Check if there are moves remaining
-    static boolean isMoveLeft(String[][] board) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (board[i][j] == "_") {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    static int minimax(String[][] board, int depth, boolean isMax) {
-        int score = evaluate(board, depth);
-
-        // If Maximizer has won the gameSession will return the evaluated score for the Maximizer
-        if (score == 10) {
-            return score;
-        }
-        // If Minimizer has won the gameSession will return the evaluated score for the Minimizer
-        if (score == -10) {
-            return score;
-        }
-
-        // If there are no moves left and there is no winner the gameSession will return a tie
-        if (!isMoveLeft(board)) { //CHANGED was (isMoveLeft(board)==false)
-            return 0;
-        }
-
-        // If it's the Maximizer's turn
-        if (isMax) {
-            int best = -1000;
-
-            // Traverse all cells
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    // Check if cell is empty
-                    if (board[i][j] == "_") {
-                        // Make the move
-                        board[i][j] = playerOne.getSymbol();
-
-                        // Call minimax recursively and choose the max value
-                        best = max(best, minimax(board, depth + 1, isMax));//CHANGED was !isMax
-
-                        // Undo the move
-                        board[i][j] = "_";
-                    }
-                }
-            }
-            return best;
-        }
-        // If it's the Minimizer's turn
-        else {
-            int best = 1000;
-
-            // Traverse all cells
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    // Check if cell is empty
-                    if (board[i][j] == "_") {
-                        // Make the move
-                        board[i][j] = playerTwo.getSymbol();
-
-                        // Call minimax recursively and choose the min value
-                        best = min(best, minimax(board, depth + 1, !isMax));
-
-                        // Undo the move
-                        board[i][j] = "_";
-                    }
-                }
-            }
-            return best;
-        }
-    }
-
-    static Move findBestMove(String[][] board) {
-        int bestVal = -1000;
-        Move bestMove = new Move();
-        bestMove.row = -1;
-        bestMove.col = -1;
-
-        // Traverse all cells, evaluate minimax function for all empty cells.
-        // Return the cell with with the optimal value.
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                // Check if cell is empty
-                if (board[i][j] == "_") {
-                    // Makle the move
-                    board[i][j] = playerOne.getSymbol();
-
-                    // Compute evaluation function for this move.
-                    int moveVal = minimax(board, 0, false);
-
-                    // Undo the move
-                    board[i][j] = "_";
-
-                    // If the value of the current move is more than the best value
-                    // update best value.
-                    if (moveVal > bestVal) {
-                        bestMove.row = i;
-                        bestMove.col = j;
-                        bestVal = moveVal;
-                    }
-                }
-            }
-        }
-        System.out.println("The value of the best move is : " + bestVal);
-        return bestMove;
-    }
-
-//    static int minimaxNEW(int depth, int nodeIndex, Boolean maximizingPlayer, int values[], int alpha, int beta) {
-//
-//        if (depth == 3) {
-//            return values[nodeIndex];
-//        }
-//
-//        if (maximizingPlayer) {
-//            int best = MIN;
-//
-//            for (int i = 0; i < 2; i++) {
-//                int val = minimaxNEW(depth + 1, nodeIndex * 2 + i, false, values, alpha, beta);
-//
-//                best = max(best, val);
-//                alpha = max(alpha, best);
-//
-//                if (beta <= alpha) {
-//                    break;
-//                }
-//            }
-//            return best;
-//        } else {
-//            int best = MAX;
-//            for (int i = 0; i < 2; i++) {
-//                int val = minimaxNEW(depth + 1, nodeIndex * 2 + i, true, values, alpha, beta);
-//
-//                best = min(best, val);
-//                beta = min(beta, best);
-//
-//                if (beta <= alpha) {
-//                    break;
-//                }
-//            }
-//            return best;
-//        }
-//    }
-//
-//    static void testNEW() {
-//        int values[] = {3, 5, 6, 9, 1, 2, 0, -1};
-//        System.out.println("The optimal value is : " +
-//                minimaxNEW(0, 0, true, values, MIN, MAX));
-//    }
 }
