@@ -39,6 +39,15 @@ public class Tile {
     public String getSymbol(){
         return this.symbol;
     }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
     @Override
     public String toString() {
 
@@ -49,4 +58,5 @@ public class Tile {
         }
 
     }
+
 }

@@ -93,7 +93,7 @@ public class Algorithm {
                         board[i][j] = playerOne.getSymbol();
 
                         // Call minimax recursively and choose the max value
-                        best = max(best, minimax(board, depth + 1, isMax, playerOne, playerTwo));//CHANGED was !isMax
+                        best = max(best, minimax(board, depth + 1, !isMax, playerOne, playerTwo));//CHANGED was !isMax
 
                         // Undo the move
                         board[i][j] = "_";
