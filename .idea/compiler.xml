@@ -6,15 +6,16 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="logiclayer" />
-        <module name="websocketserver" />
-        <module name="restserver" />
+        <module name="tictactoe" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="tictactoe" target="11" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="restserver" options="-parameters" />
+      <module name="tictactoe" options="-parameters" />
     </option>
   </component>
 </project>
