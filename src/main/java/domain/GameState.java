@@ -5,7 +5,7 @@ import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Logic {
+public class GameState {
     //State
     static Boolean isReady = false;
 
@@ -14,7 +14,7 @@ public class Logic {
     }
 
     public static void setIsReady(Boolean isReady) {
-        Logic.isReady = isReady;
+        GameState.isReady = isReady;
     }
 
     //Other stuff
@@ -125,74 +125,55 @@ public class Logic {
 
     public String turnHumanPlayer(String _numinput) {
 
-        // om continue te gebruiken moet je in een WHILE loop zitten
-
         userInput = new Scanner(_numinput);
 
-
         if (startingPlayer == 0) {
-            while (turn == playerOne) {
-                int numInput;
-                try {
-                    numInput = userInput.nextInt();
-
-                    if (!(numInput >= 0 && numInput <= 8)) {
-                        System.out.println("Invalid input; re-enter slot number:");
-                        continue;
-                    }
-                } catch (InputMismatchException e) {
-                    System.out.println("Invalid input; re-enter slot number:");
-                    continue;
-                }
-
-                //(arrayTiles[numInput].getId() == numInput) <- deze zat er bij om een of andere redenen
-                if (!tiles.get(numInput).checkOccupied()) {
-                    if (turn.equals(playerOne)) {
-                        tiles.get(numInput).setOccupiedBy(playerOne);
-                        printBoard();
-                        winner = checkWinner();
-                        turn = playerTwo;
-                        return "You've placed "+ playerOne.getSymbol() + "on vakje " + Integer.parseInt(_numinput);
-                    }
-                } else {
-                    System.out.println("Slot already taken; re-enter slot number:");
-                    continue;
-                }
+            if (turn == playerOne) {
+                return makemove(playerOne, playerTwo, _numinput);
+            } else {
+                return makemove(playerTwo, playerOne, _numinput);
             }
-        }
 
-        if (startingPlayer == 0) {
-            while (turn == playerTwo) {
-                int numInput;
-                try {
-                    numInput = userInput.nextInt();
-
-                    if (!(numInput >= 0 && numInput <= 8)) {
-                        System.out.println("Invalid input; re-enter slot number:");
-                        continue;
-                    }
-                } catch (InputMismatchException e) {
-                    System.out.println("Invalid input; re-enter slot number:");
-                    continue;
-                }
-
-                //(arrayTiles[numInput].getId() == numInput) <- deze zat er bij om een of andere redenen
-                if (!tiles.get(numInput).checkOccupied()) {
-                    if (turn.equals(playerTwo)) {
-                        tiles.get(numInput).setOccupiedBy(playerTwo);
-                        printBoard();
-                        winner = checkWinner();
-                        turn = playerOne;
-                        return "You've placed "+ playerTwo.getSymbol() + "on vakje " + Integer.parseInt(_numinput);
-                    }
-                } else {
-                    System.out.println("Slot already taken; re-enter slot number:");
-                    continue;
-                }
-            }
         }
 
         return "Wejow";
+    }
+
+    public String makemove(Player thisPlayer, Player otherPlayer, String _numinput) {
+        while (turn == thisPlayer) {
+            int numInput;
+            try {
+                numInput = userInput.nextInt();
+
+                if (!(numInput >= 0 && numInput <= 8)) {
+                    System.out.println("Invalid input; re-enter slot number:");
+                    continue;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input; re-enter slot number:");
+                continue;
+            }
+
+            //(arrayTiles[numInput].getId() == numInput) <- deze zat er bij om een of andere redenen
+            if (!tiles.get(numInput).checkOccupied()) {
+                if (turn.equals(thisPlayer)) {
+                    tiles.get(numInput).setOccupiedBy(thisPlayer);
+                    printBoard();
+                    winner = checkWinner();
+                    if (winner == null){
+                        turn = otherPlayer;
+                        return thisPlayer.getName() + " placed a " + thisPlayer.getSymbol() + " on " + Integer.parseInt(_numinput);
+                    } else{
+                        return winner;
+                    }
+
+                }
+            } else {
+                //System.out.println("Slot already taken; re-enter slot number:");
+                return "Slot already taken please re-enter slot number:";
+            }
+        }
+        return "Nejo";
     }
 
 
@@ -294,11 +275,11 @@ public class Logic {
                     break;
             }
             if (line.equals(playerOne.getSymbol() + playerOne.getSymbol() + playerOne.getSymbol())) {
-                return playerOne.getName();
+                return "The winner is " + playerOne.getName();
             } else if (line.equals(playerTwo.getSymbol() + playerTwo.getSymbol() + playerTwo.getSymbol())) {
                 return playerTwo.getName();
             } else if (allTilesOccupied) {
-                return "draw";
+                return "The game ended in a draw";
             }
         }
 

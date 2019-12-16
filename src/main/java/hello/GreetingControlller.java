@@ -6,15 +6,10 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.util.HtmlUtils;
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Random;
-import java.util.Scanner;
-
 @Controller
 public class GreetingControlller {
 
-    Logic logic = new Logic();
+    GameState logic = new GameState();
 
     @MessageMapping("/hello")
     @SendTo("/tictactoe/greetings")
@@ -34,7 +29,7 @@ public class GreetingControlller {
 //        if (message.getName().equals("X")) {
 //            return new Greeting("Movement = " + HtmlUtils.htmlEscape(message.getName()) + logic.printBoard());
 //        }
-        return new Greeting("Your move is " + HtmlUtils.htmlEscape(logic.turnHumanPlayer(message.getName())));
+        return new Greeting(" - " + HtmlUtils.htmlEscape(logic.turnHumanPlayer(message.getName())));
     }
 
     public void game() {
