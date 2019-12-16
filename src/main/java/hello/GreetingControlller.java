@@ -34,12 +34,6 @@ public class GreetingControlller {
 //        if (message.getName().equals("X")) {
 //            return new Greeting("Movement = " + HtmlUtils.htmlEscape(message.getName()) + logic.printBoard());
 //        }
-//        if (message.getName().equals("O")) {
-//            return new Greeting("Movement = " + HtmlUtils.htmlEscape(message.getName()) + "!");
-//        } else {
-//            return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
-//        }
-        //int numinput = Integer.parseInt(message.getName());
         return new Greeting("Your move is " + HtmlUtils.htmlEscape(logic.turnHumanPlayer(message.getName())));
     }
 

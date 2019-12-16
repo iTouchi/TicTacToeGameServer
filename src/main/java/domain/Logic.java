@@ -152,6 +152,38 @@ public class Logic {
                         printBoard();
                         winner = checkWinner();
                         turn = playerTwo;
+                        return "You've placed "+ playerOne.getSymbol() + "on vakje " + Integer.parseInt(_numinput);
+                    }
+                } else {
+                    System.out.println("Slot already taken; re-enter slot number:");
+                    continue;
+                }
+            }
+        }
+
+        if (startingPlayer == 0) {
+            while (turn == playerTwo) {
+                int numInput;
+                try {
+                    numInput = userInput.nextInt();
+
+                    if (!(numInput >= 0 && numInput <= 8)) {
+                        System.out.println("Invalid input; re-enter slot number:");
+                        continue;
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input; re-enter slot number:");
+                    continue;
+                }
+
+                //(arrayTiles[numInput].getId() == numInput) <- deze zat er bij om een of andere redenen
+                if (!tiles.get(numInput).checkOccupied()) {
+                    if (turn.equals(playerTwo)) {
+                        tiles.get(numInput).setOccupiedBy(playerTwo);
+                        printBoard();
+                        winner = checkWinner();
+                        turn = playerOne;
+                        return "You've placed "+ playerTwo.getSymbol() + "on vakje " + Integer.parseInt(_numinput);
                     }
                 } else {
                     System.out.println("Slot already taken; re-enter slot number:");
