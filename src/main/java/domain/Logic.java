@@ -6,6 +6,17 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Logic {
+    //State
+    static Boolean isReady = false;
+
+    public static Boolean getIsReady() {
+        return isReady;
+    }
+
+    public static void setIsReady(Boolean isReady) {
+        Logic.isReady = isReady;
+    }
+
     //Other stuff
     static Scanner userInput;
 
@@ -48,6 +59,8 @@ public class Logic {
         turn = playerOne;
         allTilesOccupied = false;
         algorithm = new Algorithm();
+
+        isReady = true;
     }
 
 //    public static void main(String[] args) {
@@ -73,7 +86,7 @@ public class Logic {
         while (winner == null) {
 
             while (turn == playerOne) {
-                turnHumanPlayer();
+//                turnHumanPlayer();
             }
             while (turn == playerTwo) {
                 turnAiPlayer();
@@ -110,9 +123,12 @@ public class Logic {
     }
 
 
-    public void turnHumanPlayer() {
+    public String turnHumanPlayer(String _numinput) {
 
         // om continue te gebruiken moet je in een WHILE loop zitten
+
+        userInput = new Scanner(_numinput);
+
 
         if (startingPlayer == 0) {
             while (turn == playerOne) {
@@ -144,7 +160,7 @@ public class Logic {
             }
         }
 
-
+        return "Wejow";
     }
 
 

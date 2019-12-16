@@ -1,4 +1,5 @@
 var stompClient = null;
+var gamestate = null;
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -12,12 +13,12 @@ function setConnected(connected) {
 }
 
 function connect() {
-    var socket = new SockJS('/gs-guide-websocket');
+    var socket = new SockJS('/tictactoe-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/greetings', function (greeting) {
+        stompClient.subscribe('/tictactoe/greetings', function (greeting) { //was /topic/greetings
             showGreeting(JSON.parse(greeting.body).content);
         });
     });

@@ -17,20 +17,30 @@ public class GreetingControlller {
     Logic logic = new Logic();
 
     @MessageMapping("/hello")
-    @SendTo("/topic/greetings")
+    @SendTo("/tictactoe/greetings")
     public Greeting greeting(HelloMessage message) throws Exception {
         Thread.sleep(100); // simulated delay
 
-        logic.getReady();
-
-        if (message.getName().equals("X")) {
-            return new Greeting("Movement = " + HtmlUtils.htmlEscape(message.getName()) + logic.printBoard());
-        }
-        if (message.getName().equals("O")) {
-            return new Greeting("Movement = " + HtmlUtils.htmlEscape(message.getName()) + "!");
+        if (logic.getIsReady()) {
+            return makeMove(message);
         } else {
-            return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
+            logic.getReady();
+            return makeMove(message);
         }
+
+    }
+
+    public Greeting makeMove(HelloMessage message) {
+//        if (message.getName().equals("X")) {
+//            return new Greeting("Movement = " + HtmlUtils.htmlEscape(message.getName()) + logic.printBoard());
+//        }
+//        if (message.getName().equals("O")) {
+//            return new Greeting("Movement = " + HtmlUtils.htmlEscape(message.getName()) + "!");
+//        } else {
+//            return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
+//        }
+        //int numinput = Integer.parseInt(message.getName());
+        return new Greeting("Your move is " + HtmlUtils.htmlEscape(logic.turnHumanPlayer(message.getName())));
     }
 
     public void game() {
